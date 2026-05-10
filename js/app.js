@@ -164,11 +164,15 @@ function applyFilters() {
   const selectedPriority = priorityFilter.value;
 
   let filtered = checks.filter((check) =>
-    check.owner.toLowerCase().includes(searchTerm),
-  ); // Intentional bug: search should include title, category, priority, status, and owner.
+    check.title.toLowerCase().includes(searchTerm) ||
+    check.category.toLowerCase().includes(searchTerm) ||
+    check.priority.toLowerCase().includes(searchTerm) ||
+    check.status.toLowerCase().includes(searchTerm) ||
+    check.owner.toLowerCase().includes(searchTerm)
+  );
 
   if (selectedStatus !== "All") {
-    filtered = filtered.filter((check) => check.priority === selectedStatus);
+    filtered = filtered.filter((check) => check.status === selectedStatus);
   } // Intentional bug: status filter compares against priority.
 
   if (selectedPriority !== "All") {
@@ -278,6 +282,9 @@ function handleStatusChange(event) {
   check.status = statusSelect.value;
   renderRows(currentView);
   logActivity(`Changed "${check.title}" to ${check.status}.`);
+  saveChecks();
+  applyFilters();
+  updateMetrics();
   // Intentional bug: status changes should save, update filters, and refresh metrics.
 }
 
