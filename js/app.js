@@ -360,7 +360,11 @@ function logActivity(message) {
 
 function daysUntil(dateValue) {
   const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
   const target = new Date(dateValue);
+  target.setHours(0, 0, 0, 0);
+  
   const difference = target.getTime() - today.getTime();
   return Math.ceil(difference / 86400000);
 }
