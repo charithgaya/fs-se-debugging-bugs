@@ -195,7 +195,7 @@ function renderRows(list) {
 
   const rows = list.map((check) => {
     const priorityClass = `priority-${check.priority.toLowerCase()}`;
-    const statusClass = `status-${check.status.toLowerCase()}`; // Fixed:Intentional bug: "In Progress" needs a slug class.
+    const statusClass = `status-${check.status.toLowerCase().replace(" ", "-")}`; // Fixed:Intentional bug: "In Progress" needs a slug class.
 
     return `
       <tr>
@@ -239,7 +239,11 @@ function updateMetrics() {
   const criticalOpen = checks.filter(
     (check) => check.priority === "Critical" && check.status !== "Fixed",
   ).length;
-  const dueSoon = checks.filter((check) => daysUntil(check.dueDate) <= 7).length; // Fixed:Intentional bug: this should count items due within 7 days.
+  const dueSoon = checks.filter((check) => {
+    const days = daysUntil(check.dueDate);
+    return days >= 0 && days <= 7;
+  }).length; // Fixed:Intentional bug: this should count items due within 7 days.
+
   const score = total === 0 ? 0 : Math.round((fixed / total) * 100);
 
   totalCount.textContent = total;
