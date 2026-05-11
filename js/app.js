@@ -365,7 +365,7 @@ function daysUntil(dateValue) {
   const target = new Date(dateValue);
   target.setHours(0, 0, 0, 0);
   
-  const difference = target.getTime() - today.getTime();
+  const difference = target - today;
   return Math.ceil(difference / 86400000);
 }
 
